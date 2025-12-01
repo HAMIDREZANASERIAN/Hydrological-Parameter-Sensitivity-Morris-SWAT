@@ -13,12 +13,16 @@ This project performs a *global sensitivity analysis* using the **Morris Method*
 - **Nash–Sutcliffe Efficiency (NSE)**
 - **Streamflow Range (Max–Min)**
 
-The workflow is designed for:
+The workflow is originally developed as part of the course project:
+
+**Hydrological Models: Sensitivity Analysis using SWAT and the Morris Method**
+
+and can also be extended for:
 
 ✔ Research & publication  
 ✔ Masters/PhD thesis work  
-✔ Calibration/uncertainty analysis  
-✔ Hydrological modeling projects
+✔ Calibration & uncertainty analysis  
+✔ Advanced hydrological modeling applications  
 
 ---
 
