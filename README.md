@@ -1,201 +1,141 @@
 # Hydrological-Parameter-Sensitivity-Morris-SWAT
 
-A complete, reproducible, and research-grade workflow for performing **global sensitivity analysis** of key hydrological parameters in the **SWAT (Soil and Water Assessment Tool)** model using the **Morris Method (Elementary Effects)**.
-
-This project integrates:
-
-- ArcSWAT model parameter perturbation  
-- Morris sampling using **SALib**  
-- Hydrological output extraction from `output.rch`  
-- Comparison of simulated vs. observed streamflow  
-- Evaluation using **Nash–Sutcliffe Efficiency (NSE)** and **Flow Range (Max–Min)**  
-- Ranking SWAT parameters based on sensitivity indices (μ\*, σ)
-
-This repository demonstrates a **scientific, well-documented, automated**, and **fully reproducible** analysis pipeline designed for hydrologic modeling and understanding watershed sensitivity.
+A complete workflow for global sensitivity analysis of hydrological parameters in the SWAT model using the **Morris Method (Elementary Effects)**.  
+This project integrates parameter perturbation, ArcSWAT model execution, output extraction, and multi-objective evaluation (NSE and flow range).
 
 ---
 
-## 🌍 Project Motivation
+## 📌 Project Overview
 
-Understanding parameter influence in SWAT is essential for:
+This repository contains:
 
-- Model calibration  
-- Reducing uncertainty  
-- Improving streamflow predictions  
-- Identifying dominant watershed processes  
+- A reproducible workflow for **Morris global sensitivity analysis**
+- A Jupyter Notebook implementing:
+  - parameter sampling (SALib)
+  - dynamic modification of SWAT input files (`.mgt`, `.bsn`, `.gw`, `.sol`)
+  - execution of the SWAT hydrological model
+  - extraction of streamflow from `output.rch`
+  - computation of NSE and discharge range
+  - sensitivity plots for all 12 hydrological parameters
+- A `/data` directory containing sample observed streamflow
 
-The **Morris Elementary Effects method** offers an efficient global sensitivity approach suitable for complex hydrologic models such as SWAT.
-
----
-
-## ⚙️ Methodology Overview
-
-### **1️⃣ Parameter Selection & Perturbation**
-
-Selected hydrological parameters (e.g., CN2, ALPHA_BF, GW_DELAY, SOL_K, SOL_AWC, GWQMN, SURLAG, RCHRG_DP, etc.)  
-are perturbed using Morris sampling.
-
-Each trajectory includes:
-
-- Writing updated parameters to the SWAT TxtInOut files  
-- Running the SWAT executable  
-- Extracting discharge time series from `output.rch`  
+This project demonstrates a full scientific workflow suitable for hydrological modeling, uncertainty quantification, and environmental system analysis.
 
 ---
 
-### **2️⃣ Morris Sampling (SALib)**
+## 🧪 Methods Used
 
-| Setting | Value |
-|--------|--------|
-| Sample Size (N) | 3000 |
-| Trajectories | 16 |
-| Levels | 8 |
-| Method | Optimized Morris |
+### **1. Morris Global Sensitivity Analysis**
+The Morris method is used to estimate:
+- **mu\*** → the overall sensitivity (mean absolute effect)  
+- **sigma** → the nonlinearity / interaction strength  
 
-The SALib library generates parameter combinations fed into SWAT simulations.
+### **2. Objective Functions**
+- **NSE (Nash–Sutcliffe Efficiency)**  
+  Used to measure how well the simulation fits the observed streamflow.  
 
----
-
-### **3️⃣ Hydrological Metrics Computed**
-
-For each simulation:
-
-#### ✔ **Nash–Sutcliffe Efficiency (NSE)**  
-Measures predictive accuracy of streamflow.
-
-#### ✔ **Flow Range (Max–Min)**  
-Captures discharge variability.
-
-Both metrics quantify the hydrological response sensitivity to parameter perturbations.
+- **Flow Range (Max–Min)**  
+  Measures variability in simulated discharge.
 
 ---
 
-### **4️⃣ Sensitivity Analysis Output**
+## 🧩 Parameters Analyzed
 
-For each parameter:
+12 key SWAT parameters:
 
-- **μ\*** → Mean absolute effect (total influence)  
-- **σ** → Variability due to interactions & non-linearity  
-
-Large **μ\*** → highly influential parameter  
-Large **σ** → interactive / nonlinear parameter  
+| Parameter | Description |
+|----------|-------------|
+| CN2 | SCS Curve Number |
+| SURLAG | Surface runoff lag time |
+| SFTMP | Snowfall temperature |
+| SMTMP | Snow melt base temperature |
+| SMFMX | Maximum snowmelt factor |
+| SMFMN | Minimum snowmelt factor |
+| GW_DELAY | Groundwater delay |
+| ALPHA_BF | Baseflow recession constant |
+| GWQMN | Groundwater threshold depth |
+| RCHRG_DP | Deep aquifer percolation |
+| SOL_K | Saturated hydraulic conductivity |
+| SOL_AWC | Available water content |
 
 ---
 
-## 📁 Repository Structure
+## 📂 Repository Structure
 
 ```
-Hydrological-Parameter-Sensitivity-Morris-SWAT
+Hydrological-Parameter-Sensitivity-Morris-SWAT/
 │
-├── data/
-│   ├── Observed Streamflow.xlsx    # Observed discharge data
-│   ├── output.rch                  # SWAT simulated discharge
-│   └── (additional SWAT TxtInOut files if needed)
-│
-├── swat_morris_sensitivity.ipynb   # Main Jupyter Notebook workflow
+├── swat_morris_sensitivity.ipynb   # Main notebook
 ├── README.md                       # Project documentation
-├── .gitignore
-└── Data.rar                        # Optional: compressed SWAT folder
+├── data/
+│   ├── Observed_Streamflow.xlsx    # Example observed data
+│   └── (place your SWAT TxtInOut here)
 ```
 
 ---
 
-## 🚀 Running the Project
+## ⚠️ **Licensing and SWAT File Restrictions**
 
-### **1️⃣ Install Dependencies**
+Due to SWAT license restrictions, the following files **cannot be included** in this repository:
 
-```
-pip install SALib pandas numpy scipy matplotlib openpyxl
-```
+- `swat2012.exe`
+- The full **TxtInOut** directory  
+- Any SWAT project files (.mgt, .gw, .bsn, .sol, etc.)
 
----
+To run the notebook with your own SWAT setup:
 
-### **2️⃣ Place Input Data into `/data` Folder**
-
-Required:
-
-- `Observed Streamflow.xlsx`  
-- `output.rch`  
-
-Optional:
-
-- Full SWAT `TxtInOut` folder for automatic runs  
-
----
-
-### **3️⃣ Open the Notebook**
-
-Using Anaconda:
+1. Place your **TxtInOut** folder inside `/data/`
+2. Place your **swat2012.exe** inside `/data/`
+3. Update the paths in the notebook if necessary
 
 ```
-jupyter notebook swat_morris_sensitivity.ipynb
+⚠️ Note: This repository contains only *public and reproducible components*.  
+All SWAT model files must be supplied by the user.
 ```
 
-Or open in **Google Colab** and upload the `data` folder.
+---
+
+## ▶️ How to Run
+
+### **1. Clone the repository**
+```bash
+git clone https://github.com/HAMIDREZANASERIAN/Hydrological-Parameter-Sensitivity-Morris-SWAT.git
+```
+
+### **2. Enter the folder**
+```bash
+cd Hydrological-Parameter-Sensitivity-Morris-SWAT
+```
+
+### **3. Launch Jupyter**
+```bash
+jupyter notebook
+```
+
+### **4. Open and run**
+```
+swat_morris_sensitivity.ipynb
+```
 
 ---
 
-### **4️⃣ Run All Cells**
-
-The notebook automatically:
-
-- Generates Morris samples  
-- Updates SWAT parameters  
-- Runs SWAT (if TxtInOut is present)  
-- Reads observed and simulated data  
-- Computes NSE + Flow Range  
-- Performs Morris analysis  
-- Produces sensitivity plots and rankings  
+## 👨‍💻 Developer
+**Hamidreza Naserian**  
 
 ---
 
-## 📊 Outputs
+## 🌟 Purpose of the Repository
 
-The workflow produces:
+This repository showcases:
 
-### **Sensitivity Results**
-- μ\* (mean absolute effects)  
-- σ (interaction / nonlinearity)
+- Skill in hydrological modeling  
+- Experience with SWAT & ArcSWAT  
+- ML-based environmental modeling  
+- Sensitivity analysis  
+- Working with Python scientific ecosystem  
+- Ability to create reproducible workflows  
+- GitHub proficiency  
 
-### **Performance Metrics**
-- NSE  
-- Flow Range  
-
-### **Plots**
-- NSE-based sensitivity scatter  
-- Flow-range sensitivity scatter  
-- Hydrograph comparisons  
+Perfect for **PhD applications**, **CVs**, and **research portfolios**.
 
 ---
-
-## 🧠 Scientific Contribution
-
-This project demonstrates:
-
-- Full automation of SWAT sensitivity analysis  
-- Integration of hydrological modeling with Python  
-- Global sensitivity quantification using Morris method  
-- Reproducible workflow for academic and applied hydrology  
-- Identification of dominant watershed parameters  
-
-Suitable for:
-
-- MSc / PhD research  
-- SWAT calibration preparation  
-- Parameter screening  
-- Watershed modeling & environmental studies  
-
----
-
-## 👤 Developer
-
-**Hamidreza Naserianhanzaei**
-
-Hydrological Modeling • Watershed Systems • Python Automation • SWAT • Sensitivity Analysis
-
----
-
-## 📄 License
-
-Provided for academic and research use. Redistribution of SWAT executable is not permitted.
-
