@@ -148,8 +148,8 @@ This project can be extended for:
 
 ## 9. Author
 
-**Hamidreza Naserian**  
-Hydroinformatics & Water Resources Engineering  
+**Hamidreza Naserianhanzaei**  
+Water Resources Management and Engineering
 Email: hamidreza.naserianh@gmail.com
 
 ---
